@@ -1,0 +1,14 @@
+{
+	"ImportPath": "github.com/jrivets/log4g",
+	"GoVersion": "go1.5",
+	"Deps": [
+		{
+			"ImportPath": "github.com/jrivets/go-common/collections",
+			"Rev": "e2dacbfa20e382d513167b22ea98856f86b48016"
+		},
+		{
+			"ImportPath": "gopkg.in/check.v1",
+			"Rev": "5b76b26efe7f426789852e983fbde4de62c42282"
+		}
+	]
+}

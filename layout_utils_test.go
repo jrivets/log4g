@@ -61,7 +61,9 @@ func (s *layoutUtilsSuite) TestParseLayout(c *C) {
 }
 
 func (s *layoutUtilsSuite) TestToLogMessage(c *C) {
+	testTime := time.Unix(123456, 0)
+	expectedTime := testTime.Format("[01-02 15:04:05.000]")
 	t, _ := ParseLayout("[%d{01-02 15:04:05.000}] %p %c: %%%m")
-	le := &LogEvent{FATAL, time.Unix(123456, 0), "a.b.c", "The Message"}
-	c.Assert(ToLogMessage(le, t), Equals, "[01-02 02:17:36.000] FATAL a.b.c: %The Message")
+	le := &LogEvent{FATAL, testTime, "a.b.c", "The Message"}
+	c.Assert(ToLogMessage(le, t), Equals, expectedTime+" FATAL a.b.c: %The Message")
 }

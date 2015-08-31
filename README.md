@@ -1,4 +1,5 @@
 # Log4g - Go (golang) Logging Library
+[![Build Status](https://travis-ci.org/jrivets/log4g.svg?branch=master)](https://travis-ci.org/jrivets/log4g)
 Log4g is an open source project which intends to bring fast, flexible and scalable logging solution to the Golang world. It allows the developer to control which log statements are output with arbitrary granularity. It is fully configurable at runtime using external configuration files. Among other logging approaches log4g borrows some cool stuff from log4j library, but it doesn't try to repeat the library architecture, even many things look pretty similar (including the name of the project with one letter different only)
 
 ## Quick start

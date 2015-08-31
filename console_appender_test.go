@@ -37,10 +37,12 @@ func (s *cAppenderSuite) TestAppend(c *C) {
 	caFactory.out = s
 
 	a, _ := caFactory.NewAppender(map[string]string{"layout": "[%d{15:04:05.000}] %p %c: %m"})
-	appended := a.Append(&LogEvent{FATAL, time.Unix(123456, 0), "a.b.c", "Hello Console!"})
+	testTime := time.Unix(123456, 0)
+	expectedTime := testTime.Format("[15:04:05.000]")
+	appended := a.Append(&LogEvent{FATAL, testTime, "a.b.c", "Hello Console!"})
 	c.Assert(appended, Equals, true)
 	<-s.signal
-	c.Assert(s.msg, Equals, "[02:17:36.000] FATAL a.b.c: Hello Console!\n")
+	c.Assert(s.msg, Equals, expectedTime+" FATAL a.b.c: Hello Console!\n")
 
 	caFactory.Shutdown()
 	appended = a.Append(&LogEvent{FATAL, time.Unix(0, 0), "a.b.c", "Never delivered"})

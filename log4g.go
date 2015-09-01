@@ -1,3 +1,20 @@
+/*
+Log4g allows the developer to control which log statements are output with arbitrary granularity.
+It is fully configurable at runtime using external configuration files. Among other logging approaches
+log4g borrows some cool stuff from log4j library, but it doesn't try to repeat the library architecture,
+even many things look pretty similar (including the name of the project with one letter different only)
+
+To start working with log4g you have to import log4g package, get a `Logger` instance and start to use it.
+log4g will use default configuration if no configuration is provided:
+
+	import "github.com/jrivets/log4g"
+	func main() {
+		helloLogger := log4g.GetLogger("Hello")
+		helloLogger.Info("Hello ", "GoLang World")
+		defer log4g.Shutdown()
+	}
+
+*/
 package log4g
 
 import "time"

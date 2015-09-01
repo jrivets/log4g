@@ -67,7 +67,7 @@ func (caf *consoleAppenderFactory) Shutdown() {
 }
 
 // Appender interface implementation
-func (cAppender *consoleAppender) Append(event *LogEvent) (ok bool) {
+func (cAppender *consoleAppender) Append(event *Event) (ok bool) {
 	ok = false
 	defer EndQuietly()
 	msg := ToLogMessage(event, cAppender.layoutTemplate)

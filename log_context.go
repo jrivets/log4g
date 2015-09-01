@@ -11,7 +11,7 @@ type logContext struct {
 	appenders  []Appender
 	inherited  bool
 	blocking   bool
-	eventsCh   chan *LogEvent
+	eventsCh   chan *Event
 	controlCh  chan bool
 }
 
@@ -24,7 +24,7 @@ func newLogContext(loggerName string, appenders []Appender, inherited, blocking 
 		return nil, errors.New("At least one appender should be in Log Context")
 	}
 
-	eventsCh := make(chan *LogEvent, bufSize)
+	eventsCh := make(chan *Event, bufSize)
 	controlCh := make(chan bool, 1)
 	lc := &logContext{loggerName, appenders, inherited, blocking, eventsCh, controlCh}
 
@@ -58,7 +58,7 @@ func getLogLevelContext(loggerName string, logContexts *collections.SortedSlice)
 // log() function sends the logEvent to all the logContext appenders.
 // It returns true if the logEvent was sent and false if the context is shut down or
 // the context is non-blocking (allows to lost log messages in case of overflow)
-func (lc *logContext) log(le *LogEvent) (result bool) {
+func (lc *logContext) log(le *Event) (result bool) {
 	// Channel can be already closed, so end quietly
 	result = false
 	defer EndQuietly()
@@ -77,7 +77,7 @@ func (lc *logContext) log(le *LogEvent) (result bool) {
 }
 
 // Called from processing go routine
-func (lc *logContext) onEvent(le *LogEvent) {
+func (lc *logContext) onEvent(le *Event) {
 	appenders := lc.appenders
 	if len(appenders) == 1 {
 		appenders[0].Append(le)

@@ -194,7 +194,7 @@ func (faf *fileAppenderFactory) Shutdown() {
 	// do nothing here, appenders should be shut down by log context
 }
 
-func (fa *fileAppender) Append(event *LogEvent) (ok bool) {
+func (fa *fileAppender) Append(event *Event) (ok bool) {
 	ok = false
 	defer EndQuietly()
 	msg := ToLogMessage(event, fa.layoutTemplate)

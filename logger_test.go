@@ -35,7 +35,7 @@ func (s *loggerSuite) TestApplyNewLevelToLoggers(c *C) {
 }
 
 func (s *loggerSuite) TestLog(c *C) {
-	lctx := &logContext{eventsCh: make(chan *LogEvent, 1)}
+	lctx := &logContext{eventsCh: make(chan *Event, 1)}
 	l := &logger{"a", nil, lctx, INFO}
 	l.Log(INFO, "Hello")
 	go waitThenClose(500, lctx)
@@ -48,7 +48,7 @@ func (s *loggerSuite) TestLog(c *C) {
 }
 
 func (s *loggerSuite) TestLogDisabled(c *C) {
-	lctx := &logContext{eventsCh: make(chan *LogEvent, 1)}
+	lctx := &logContext{eventsCh: make(chan *Event, 1)}
 	l := &logger{"a", nil, lctx, INFO}
 	l.Log(DEBUG, "Hello")
 	go waitThenClose(50, lctx)
@@ -57,7 +57,7 @@ func (s *loggerSuite) TestLogDisabled(c *C) {
 }
 
 func (s *loggerSuite) TestLogf(c *C) {
-	lctx := &logContext{eventsCh: make(chan *LogEvent, 2)}
+	lctx := &logContext{eventsCh: make(chan *Event, 2)}
 	l := &logger{"a", nil, lctx, INFO}
 	l.Logf(INFO, "Hello %s")
 	l.Logf(INFO, "Hello %s", "World!")
@@ -72,7 +72,7 @@ func (s *loggerSuite) TestLogf(c *C) {
 }
 
 func (s *loggerSuite) TestLogp(c *C) {
-	lctx := &logContext{eventsCh: make(chan *LogEvent, 1)}
+	lctx := &logContext{eventsCh: make(chan *Event, 1)}
 	l := &logger{"a", nil, lctx, INFO}
 	l.Logp(INFO, lctx)
 	go waitThenClose(500, lctx)
@@ -82,7 +82,7 @@ func (s *loggerSuite) TestLogp(c *C) {
 }
 
 func (s *loggerSuite) TestMessages(c *C) {
-	lctx := &logContext{eventsCh: make(chan *LogEvent, 10)}
+	lctx := &logContext{eventsCh: make(chan *Event, 10)}
 	l := &logger{"a", nil, lctx, TRACE}
 	l.Info(INFO)
 	l.Warn(WARN)

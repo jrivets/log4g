@@ -51,11 +51,11 @@ type Logger interface {
 	Logp(level Level, payload interface{})
 }
 
-// LogEvent is DTO, bearing a log message between the log4g components. This
+// Event is DTO, bearing a log message between the log4g components. This
 // object contains information about the message which eventually should be
 // delivered to the log storage(s) (final destinations of the message)
 // through one or many log appenders
-type LogEvent struct {
+type Event struct {
 	Level      Level
 	Timestamp  time.Time
 	LoggerName string
@@ -65,7 +65,7 @@ type LogEvent struct {
 // Appender is an interface for a log endpoint. Different log storages can be
 // connected to the library by implementing the interface
 type Appender interface {
-	Append(event *LogEvent) bool
+	Append(event *Event) bool
 	// should be called every time when the instance is not going to be used anymore
 	Shutdown()
 }

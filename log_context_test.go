@@ -7,7 +7,7 @@ import (
 )
 
 type logContextSuite struct {
-	logEvents []*LogEvent
+	logEvents []*Event
 	hasSleep  bool
 }
 
@@ -33,12 +33,12 @@ func (s *logContextSuite) TestNewLogContext(c *C) {
 func (s *logContextSuite) TestLogContextWorkflow(c *C) {
 	appenders := make([]Appender, 1, 10)
 	appenders[0] = s
-	s.logEvents = make([]*LogEvent, 0, 10)
+	s.logEvents = make([]*Event, 0, 10)
 	lc, err := newLogContext("abc", appenders, true, true, 1)
 	c.Assert(lc, NotNil)
 	c.Assert(err, IsNil)
 
-	le := new(LogEvent)
+	le := new(Event)
 	lc.log(le)
 	for i := 0; i < 10; i++ {
 		if len(s.logEvents) > 0 && s.logEvents[0] == le {
@@ -57,12 +57,12 @@ func (s *logContextSuite) TestLogContextWorkflow(c *C) {
 func (s *logContextSuite) TestNonBlockingLogContext(c *C) {
 	appenders := make([]Appender, 1, 10)
 	appenders[0] = s
-	s.logEvents = make([]*LogEvent, 0, 100)
+	s.logEvents = make([]*Event, 0, 100)
 	lc, err := newLogContext("abc", appenders, true, false, 1)
 	c.Assert(lc, NotNil)
 	c.Assert(err, IsNil)
 
-	le := new(LogEvent)
+	le := new(Event)
 	for i := 0; i < cap(s.logEvents); i++ {
 		lc.log(le)
 	}
@@ -94,7 +94,7 @@ func (s *logContextSuite) TestGetLogLevelContext(c *C) {
 	c.Assert(getLogLevelContext("b", ss).loggerName, Equals, "b")
 }
 
-func (lcs *logContextSuite) Append(logEvent *LogEvent) bool {
+func (lcs *logContextSuite) Append(logEvent *Event) bool {
 	lcs.logEvents = append(lcs.logEvents, logEvent)
 	if lcs.hasSleep {
 		time.Sleep(time.Millisecond)

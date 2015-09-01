@@ -152,7 +152,7 @@ func (s *faConfigSuite) TestisRotationNeededNone(c *C) {
 	fa := app.(*fileAppender)
 	c.Check(fa.isRotationNeeded(), Equals, true)
 
-	app.Append(&LogEvent{INFO, time.Now(), "abc", "def"})
+	app.Append(&Event{INFO, time.Now(), "abc", "def"})
 	for fa.file == nil {
 		time.Sleep(time.Millisecond)
 	}
@@ -173,7 +173,7 @@ func (s *faConfigSuite) TestisRotationNeededSize(c *C) {
 	fa := app.(*fileAppender)
 	c.Check(fa.isRotationNeeded(), Equals, true)
 
-	app.Append(&LogEvent{INFO, time.Now(), "abc", "def"})
+	app.Append(&Event{INFO, time.Now(), "abc", "def"})
 	for fa.file == nil {
 		time.Sleep(time.Millisecond)
 	}
@@ -194,7 +194,7 @@ func (s *faConfigSuite) TestisRotationNeededDaily(c *C) {
 	fa := app.(*fileAppender)
 	c.Check(fa.isRotationNeeded(), Equals, true)
 
-	app.Append(&LogEvent{INFO, time.Now(), "abc", "def"})
+	app.Append(&Event{INFO, time.Now(), "abc", "def"})
 	for fa.file == nil {
 		time.Sleep(time.Millisecond)
 	}
@@ -226,7 +226,7 @@ func writeLogs(c *C, params map[string]string, count int) *fileAppender {
 	c.Assert(app, NotNil)
 	fa := app.(*fileAppender)
 	for idx := 0; idx < count; idx++ {
-		app.Append(&LogEvent{INFO, time.Now(), "abc", "def"})
+		app.Append(&Event{INFO, time.Now(), "abc", "def"})
 	}
 	app.Shutdown()
 	return fa

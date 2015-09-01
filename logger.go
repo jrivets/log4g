@@ -62,7 +62,7 @@ func (l *logger) Logp(level Level, payload interface{}) {
 }
 
 func (l *logger) logInternal(level Level, payload interface{}) {
-	l.lctx.log(&LogEvent{level, time.Now(), l.loggerName, payload})
+	l.lctx.log(&Event{level, time.Now(), l.loggerName, payload})
 }
 
 func (l *logger) setLogLevelSetting(lls *logLevelSetting) {

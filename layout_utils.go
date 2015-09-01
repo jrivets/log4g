@@ -111,7 +111,7 @@ func ParseLayout(layout string) (LayoutTemplate, error) {
 // [09-17 12:34:12.123] INFO a.b.c: Hello logging world!
 //
 // for the logger 'a.b.c'
-func ToLogMessage(logEvent *LogEvent, template LayoutTemplate) string {
+func ToLogMessage(logEvent *Event, template LayoutTemplate) string {
 	buf := bytes.NewBuffer(make([]byte, 0, 64))
 
 	for _, piece := range template {

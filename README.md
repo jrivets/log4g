@@ -86,7 +86,7 @@ The function is idempotent, so it always returns same object for the same _logge
 
 The `Logger` interface is only one "front end" element of the logging message processing, all logging messages in log4g are submitted through instances of the interface. 
 
-Any logging message, submitted to log4g via `Logger`, is checked against _Log Level Settings_ and if the message should NOT be filtered because of its level, it is transformed to `LogEvent` object which is passed to _Logger Context_ for further processing. 
+Any logging message, submitted to log4g via `Logger`, is checked against _Log Level Settings_ and if the message should NOT be filtered because of its level, it is transformed to `Event` object which is passed to _Logger Context_ for further processing. 
 
 ### Logger Context
 _Logger Context_ is an internal component which allows to aggregate logging messages from different _loggers_ and distribute them between _Appenders_ associated with the _Logger Context_. 
@@ -100,7 +100,7 @@ log4g always has _Logger Context_ associated with _root logger name_, so every _
 ### Appender
 log4g allows configurations when logging message will be sent to multiple destinations. The component which is plugged to log4g and implements a destination specific is called _Appender_. From log4g perspective every _appender_ implements `log4g.Appender` interface. Different _appenders_ can have different configurations based on the implementation specific. An _appender_ can be associated with multiple _Logger Contexts_ to have an ability to receive logging messages from different _loggers_.
 
-_Appender_ is uniquely named structure, it means at a moment of time there could be only one appender instance with a certain name. Every _appender_ belongs to a specific appender type, which is identified by name. log4g allows to have many _appenders_ with the same type configured. In default configuration there are 2 types of appenders allowed - `log4g/consoleAppender` and `log4g/fileAppender`. Users can implement their own _appenders_ for a destination specific, register them in log4g, and make LogEvents be sent to them by providing appropriate configuration.
+_Appender_ is uniquely named structure, it means at a moment of time there could be only one appender instance with a certain name. Every _appender_ belongs to a specific appender type, which is identified by name. log4g allows to have many _appenders_ with the same type configured. In default configuration there are 2 types of appenders allowed - `log4g/consoleAppender` and `log4g/fileAppender`. Users can implement their own _appenders_ for a destination specific, register them in log4g, and make Events be sent to them by providing appropriate configuration.
 
 ### Log4g Configuration
 log4g initialized in default configuration, so to start to use developers just can receive a _logger_ and starts to send messages into it:

@@ -229,7 +229,7 @@ func (caf *testAppenderFactory) Shutdown() {
 }
 
 // Appender interface implementation
-func (tAppender *testAppender) Append(event *LogEvent) (ok bool) {
+func (tAppender *testAppender) Append(event *Event) (ok bool) {
 	return true
 }
 

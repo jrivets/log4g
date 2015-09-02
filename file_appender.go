@@ -3,7 +3,7 @@ package log4g
 import (
 	"errors"
 	"fmt"
-	"github.com/jrivets/log4g/Godeps/_workspace/src/github.com/jrivets/go-common/collections"
+	"github.com/jrivets/log4g/Godeps/_workspace/src/github.com/jrivets/gorivets"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -79,7 +79,7 @@ type fileAppender struct {
 }
 
 type stats struct {
-	chunks     *collections.SortedSlice
+	chunks     *gorivets.SortedSlice
 	chunksSize int64
 
 	size          int64
@@ -93,7 +93,7 @@ type chunkInfo struct {
 	size int64
 }
 
-func (ci *chunkInfo) Compare(other collections.Comparator) int {
+func (ci *chunkInfo) Compare(other gorivets.Comparator) int {
 	return ci.id - other.(*chunkInfo).id
 }
 
@@ -125,22 +125,22 @@ func (faf *fileAppenderFactory) NewAppender(params map[string]string) (Appender,
 		return nil, errors.New("Cannot create file appender, incorrect layout: " + err.Error())
 	}
 
-	buffer, err := ParseInt(params[FAParamFileBuffer], 1, 10000, 100)
+	buffer, err := gorivets.ParseInt(params[FAParamFileBuffer], 1, 10000, 100)
 	if err != nil {
 		return nil, errors.New("Invalid " + FAParamFileBuffer + " value: " + err.Error())
 	}
 
-	fileAppend, err := ParseBool(params[FAParamFileAppend], true)
+	fileAppend, err := gorivets.ParseBool(params[FAParamFileAppend], true)
 	if err != nil {
 		return nil, errors.New("Invalid " + FAParamFileAppend + " value: " + err.Error())
 	}
 
-	maxFileSize, err := ParseInt64(params[FAParamMaxSize], 1000, maxInt64, maxInt64)
+	maxFileSize, err := gorivets.ParseInt64(params[FAParamMaxSize], 1000, maxInt64, maxInt64)
 	if err != nil {
 		return nil, errors.New("Invalid " + FAParamMaxSize + " value: " + err.Error())
 	}
 
-	maxDiskSpace, err := ParseInt64(params[FAParamMaxDiskSpace], 2000, maxInt64, maxInt64)
+	maxDiskSpace, err := gorivets.ParseInt64(params[FAParamMaxDiskSpace], 2000, maxInt64, maxInt64)
 	if err != nil {
 		return nil, errors.New("Invalid " + FAParamMaxDiskSpace + " value: " + err.Error())
 	}
@@ -196,7 +196,7 @@ func (faf *fileAppenderFactory) Shutdown() {
 
 func (fa *fileAppender) Append(event *Event) (ok bool) {
 	ok = false
-	defer EndQuietly()
+	defer gorivets.EndQuietly()
 	msg := ToLogMessage(event, fa.layoutTemplate)
 	fa.msgChannel <- msg
 	ok = true
@@ -277,7 +277,7 @@ func (fa *fileAppender) cutChunks() {
 	}
 }
 
-func (fa *fileAppender) getLogChunks() (*collections.SortedSlice, int64) {
+func (fa *fileAppender) getLogChunks() (*gorivets.SortedSlice, int64) {
 	archiveName, _ := filepath.Abs(fa.fileName)
 	nameRegExp := archiveName + "\\.\\d+"
 	if fa.rotate == rsDaily {
@@ -287,7 +287,7 @@ func (fa *fileAppender) getLogChunks() (*collections.SortedSlice, int64) {
 	dir := filepath.Dir(archiveName)
 	fileInfos, _ := ioutil.ReadDir(dir)
 
-	chunks, _ := collections.NewSortedSlice(5)
+	chunks, _ := gorivets.NewSortedSlice(5)
 	var size int64 = 0
 	for _, fInfo := range fileInfos {
 		if m, _ := regexp.MatchString(nameRegExp, fInfo.Name()); fInfo.IsDir() || !m {

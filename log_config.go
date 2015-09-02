@@ -2,15 +2,15 @@ package log4g
 
 import (
 	"errors"
-	"github.com/jrivets/log4g/Godeps/_workspace/src/github.com/jrivets/go-common/collections"
+	"github.com/jrivets/log4g/Godeps/_workspace/src/github.com/jrivets/gorivets"
 	"strconv"
 	"strings"
 )
 
 type logConfig struct {
 	loggers          map[string]*logger
-	logLevels        *collections.SortedSlice
-	logContexts      *collections.SortedSlice
+	logLevels        *gorivets.SortedSlice
+	logContexts      *gorivets.SortedSlice
 	appenderFactorys map[string]AppenderFactory
 	appenders        map[string]Appender
 	levelNames       []string
@@ -53,8 +53,8 @@ func newLogConfig() *logConfig {
 	lc := &logConfig{}
 
 	lc.loggers = make(map[string]*logger)
-	lc.logLevels, _ = collections.NewSortedSlice(10)
-	lc.logContexts, _ = collections.NewSortedSlice(2)
+	lc.logLevels, _ = gorivets.NewSortedSlice(10)
+	lc.logContexts, _ = gorivets.NewSortedSlice(2)
 	lc.appenderFactorys = make(map[string]AppenderFactory)
 	lc.appenders = make(map[string]Appender)
 	lc.levelNames = make([]string, ALL+1)
@@ -94,7 +94,7 @@ func (lc *logConfig) initIfNeeded() {
 }
 
 func (lc *logConfig) cleanUp() {
-	defer EndQuietly()
+	defer gorivets.EndQuietly()
 
 	for _, ctx := range lc.logContexts.Copy() {
 		ctx.(*logContext).shutdown()
@@ -115,7 +115,7 @@ func (lc *logConfig) initWithParams(oldLogConfig *logConfig, params map[string]s
 	}
 
 	lc.levelNames = oldLogConfig.levelNames
-	lc.logLevels, _ = collections.NewSortedSliceByParams(oldLogConfig.logLevels.Copy()...)
+	lc.logLevels, _ = gorivets.NewSortedSliceByParams(oldLogConfig.logLevels.Copy()...)
 	lc.setConfigParams(params)
 }
 
@@ -194,18 +194,18 @@ func (lc *logConfig) createContexts(params map[string]string) {
 			}
 		}
 
-		bufSize, err := ParseInt64(ctxAttributes[cfgContextBufSize], 0, 100000, 100)
+		bufSize, err := gorivets.ParseInt64(ctxAttributes[cfgContextBufSize], 0, 100000, 100)
 		if err != nil {
 			panic("Incorrect buffer size=" + ctxAttributes[cfgContextBufSize] +
 				" value for context \"" + logName + "\" should be positive integer: " + err.Error())
 		}
 
-		inh, err := ParseBool(ctxAttributes[cfgContextInherited], true)
+		inh, err := gorivets.ParseBool(ctxAttributes[cfgContextInherited], true)
 		if err != nil {
 			panic("Incorrect context attibute " + cfgContextInherited + " value, should be true or false")
 		}
 
-		blocking, err := ParseBool(ctxAttributes[cfgContextBlocking], true)
+		blocking, err := gorivets.ParseBool(ctxAttributes[cfgContextBlocking], true)
 		if err != nil {
 			panic("Incorrect context attibute " + cfgContextBlocking + " value, should be true or false")
 		}

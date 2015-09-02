@@ -1,13 +1,9 @@
-package collections
+package gorivets
 
 import (
 	"errors"
 	"strconv"
 )
-
-type Comparator interface {
-	Compare(Comparator) int
-}
 
 type SortedSlice struct {
 	data []Comparator

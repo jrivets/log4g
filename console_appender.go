@@ -3,6 +3,7 @@ package log4g
 import (
 	"errors"
 	"fmt"
+	"github.com/jrivets/log4g/Godeps/_workspace/src/github.com/jrivets/gorivets"
 	"io"
 	"os"
 )
@@ -69,7 +70,7 @@ func (caf *consoleAppenderFactory) Shutdown() {
 // Appender interface implementation
 func (cAppender *consoleAppender) Append(event *Event) (ok bool) {
 	ok = false
-	defer EndQuietly()
+	defer gorivets.EndQuietly()
 	msg := ToLogMessage(event, cAppender.layoutTemplate)
 	caFactory.msgChannel <- msg
 	ok = true

@@ -1,4 +1,4 @@
-package collections
+package gorivets
 
 import (
 	. "github.com/jrivets/log4g/Godeps/_workspace/src/gopkg.in/check.v1"
@@ -7,10 +7,10 @@ import (
 
 func Test(t *testing.T) { TestingT(t) }
 
-type SortedSliceSuite struct {
+type sortedSliceSuite struct {
 }
 
-var _ = Suite(&SortedSliceSuite{})
+var _ = Suite(&sortedSliceSuite{})
 
 type paramType struct {
 	v int
@@ -28,7 +28,7 @@ func (p1 *paramType) Compare(val Comparator) int {
 	}
 }
 
-func (s *SortedSliceSuite) TestNewSortedSlice(c *C) {
+func (s *sortedSliceSuite) TestNewSortedSlice(c *C) {
 	ss, err := NewSortedSlice(-1)
 	c.Assert(ss, IsNil)
 	c.Assert(err, NotNil)
@@ -38,7 +38,7 @@ func (s *SortedSliceSuite) TestNewSortedSlice(c *C) {
 	c.Assert(err, IsNil)
 }
 
-func (s *SortedSliceSuite) TestNewSortedSliceByParams(c *C) {
+func (s *sortedSliceSuite) TestNewSortedSliceByParams(c *C) {
 	ss, err := NewSortedSliceByParams()
 	c.Assert(ss, IsNil)
 	c.Assert(err, NotNil)
@@ -53,7 +53,7 @@ func (s *SortedSliceSuite) TestNewSortedSliceByParams(c *C) {
 	c.Assert(ss.At(1).(*paramType).v, Equals, 2)
 }
 
-func (s *SortedSliceSuite) TestLen(c *C) {
+func (s *sortedSliceSuite) TestLen(c *C) {
 	ss, _ := NewSortedSliceByParams(&paramType{2}, &paramType{1})
 	c.Assert(ss.Len(), Equals, 2)
 
@@ -61,7 +61,7 @@ func (s *SortedSliceSuite) TestLen(c *C) {
 	c.Assert(ss.Len(), Equals, 0)
 }
 
-func (s *SortedSliceSuite) TestAdd(c *C) {
+func (s *sortedSliceSuite) TestAdd(c *C) {
 	ss, _ := NewSortedSlice(1)
 	ss.Add(nil)
 	c.Assert(ss.Len(), Equals, 0)
@@ -75,7 +75,7 @@ func (s *SortedSliceSuite) TestAdd(c *C) {
 	c.Assert(ss.At(1).(*paramType).v, Equals, 3)
 }
 
-func (s *SortedSliceSuite) TestFind(c *C) {
+func (s *sortedSliceSuite) TestFind(c *C) {
 	ss, _ := NewSortedSlice(1)
 	ss.Add(&paramType{3})
 	c.Check(ss.At(0).(*paramType).v, Equals, 3)
@@ -89,7 +89,7 @@ func (s *SortedSliceSuite) TestFind(c *C) {
 	c.Assert(idx, Equals, 0)
 }
 
-func (s *SortedSliceSuite) TestDelete(c *C) {
+func (s *sortedSliceSuite) TestDelete(c *C) {
 	ss, _ := NewSortedSlice(1)
 	ss.Add(&paramType{3})
 	ss.Add(&paramType{4})
@@ -105,7 +105,7 @@ func (s *SortedSliceSuite) TestDelete(c *C) {
 	c.Assert(ss.Len(), Equals, 0)
 }
 
-func (s *SortedSliceSuite) TestDeleteAt(c *C) {
+func (s *sortedSliceSuite) TestDeleteAt(c *C) {
 	ss, _ := NewSortedSlice(1)
 	ss.Add(&paramType{3})
 	ss.Add(&paramType{4})
@@ -119,7 +119,7 @@ func (s *SortedSliceSuite) TestDeleteAt(c *C) {
 	c.Assert(ss.Len(), Equals, 0)
 }
 
-func (s *SortedSliceSuite) TestCopy(c *C) {
+func (s *sortedSliceSuite) TestCopy(c *C) {
 	ss, _ := NewSortedSlice(1)
 	ss.Add(&paramType{3})
 	ss.Add(&paramType{4})

@@ -1,6 +1,6 @@
 package log4g
 
-import "github.com/jrivets/log4g/Godeps/_workspace/src/github.com/jrivets/go-common/collections"
+import "github.com/jrivets/log4g/Godeps/_workspace/src/github.com/jrivets/gorivets"
 
 type logLevelSetting struct {
 	loggerName string
@@ -12,7 +12,7 @@ type logLevelSetting struct {
  * Params:
  *		loggerName - should be eligable normalized logger name
  */
-func setLogLevel(level Level, loggerName string, logLevels *collections.SortedSlice) *logLevelSetting {
+func setLogLevel(level Level, loggerName string, logLevels *gorivets.SortedSlice) *logLevelSetting {
 	if level < 0 {
 		return nil
 	}
@@ -27,7 +27,7 @@ func setLogLevel(level Level, loggerName string, logLevels *collections.SortedSl
 	return lls
 }
 
-func getLogLevelSetting(loggerName string, logLevels *collections.SortedSlice) *logLevelSetting {
+func getLogLevelSetting(loggerName string, logLevels *gorivets.SortedSlice) *logLevelSetting {
 	lProvider := getNearestAncestor(&logLevelSetting{loggerName: loggerName}, logLevels)
 	if lProvider == nil {
 		return nil
@@ -41,6 +41,6 @@ func (lls *logLevelSetting) name() string {
 }
 
 // Comparator implementation
-func (lls *logLevelSetting) Compare(other collections.Comparator) int {
+func (lls *logLevelSetting) Compare(other gorivets.Comparator) int {
 	return compare(lls, other.(*logLevelSetting))
 }

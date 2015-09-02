@@ -1,7 +1,7 @@
 package log4g
 
 import (
-	"github.com/jrivets/log4g/Godeps/_workspace/src/github.com/jrivets/go-common/collections"
+	"github.com/jrivets/log4g/Godeps/_workspace/src/github.com/jrivets/gorivets"
 	. "github.com/jrivets/log4g/Godeps/_workspace/src/gopkg.in/check.v1"
 	"time"
 )
@@ -78,7 +78,7 @@ func (s *logContextSuite) TestNonBlockingLogContext(c *C) {
 }
 
 func (s *logContextSuite) TestGetLogLevelContext(c *C) {
-	ss, _ := collections.NewSortedSlice(2)
+	ss, _ := gorivets.NewSortedSlice(2)
 	c.Assert(getLogLevelContext("a", ss), IsNil)
 
 	appenders := make([]Appender, 1, 10)

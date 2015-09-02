@@ -2,7 +2,7 @@ package log4g
 
 import (
 	"errors"
-	"github.com/jrivets/log4g/Godeps/_workspace/src/github.com/jrivets/go-common/collections"
+	"github.com/jrivets/log4g/Godeps/_workspace/src/github.com/jrivets/gorivets"
 	"strconv"
 )
 
@@ -47,7 +47,7 @@ func onStop(controlCh chan bool) {
 	close(controlCh)
 }
 
-func getLogLevelContext(loggerName string, logContexts *collections.SortedSlice) *logContext {
+func getLogLevelContext(loggerName string, logContexts *gorivets.SortedSlice) *logContext {
 	lProvider := getNearestAncestor(&logContext{loggerName: loggerName}, logContexts)
 	if lProvider == nil {
 		return nil
@@ -61,7 +61,7 @@ func getLogLevelContext(loggerName string, logContexts *collections.SortedSlice)
 func (lc *logContext) log(le *Event) (result bool) {
 	// Channel can be already closed, so end quietly
 	result = false
-	defer EndQuietly()
+	defer gorivets.EndQuietly()
 
 	if lc.blocking {
 		lc.eventsCh <- le
@@ -99,6 +99,6 @@ func (lc *logContext) name() string {
 }
 
 // Comparator implementation
-func (lc *logContext) Compare(other collections.Comparator) int {
+func (lc *logContext) Compare(other gorivets.Comparator) int {
 	return compare(lc, other.(*logContext))
 }

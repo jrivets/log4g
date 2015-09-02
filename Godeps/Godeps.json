@@ -3,8 +3,8 @@
 	"GoVersion": "go1.5",
 	"Deps": [
 		{
-			"ImportPath": "github.com/jrivets/go-common/collections",
-			"Rev": "e2dacbfa20e382d513167b22ea98856f86b48016"
+			"ImportPath": "github.com/jrivets/gorivets",
+			"Rev": "6944693322753bef79ad8d49b9bebaee067ad24c"
 		},
 		{
 			"ImportPath": "gopkg.in/check.v1",

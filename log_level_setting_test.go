@@ -1,7 +1,7 @@
 package log4g
 
 import (
-	"github.com/jrivets/log4g/Godeps/_workspace/src/github.com/jrivets/go-common/collections"
+	"github.com/jrivets/log4g/Godeps/_workspace/src/github.com/jrivets/gorivets"
 	. "github.com/jrivets/log4g/Godeps/_workspace/src/gopkg.in/check.v1"
 	"testing"
 )
@@ -14,7 +14,7 @@ type logLevelSettingSuite struct {
 var _ = Suite(&logLevelSettingSuite{})
 
 func (s *logLevelSettingSuite) TestSetLogLevel(c *C) {
-	ss, _ := collections.NewSortedSlice(2)
+	ss, _ := gorivets.NewSortedSlice(2)
 	setLogLevel(INFO, "a.b", ss)
 	setLogLevel(INFO, "a", ss)
 	setLogLevel(INFO, "b", ss)
@@ -26,7 +26,7 @@ func (s *logLevelSettingSuite) TestSetLogLevel(c *C) {
 }
 
 func (s *logLevelSettingSuite) TestGetSetLogLevel(c *C) {
-	ss, _ := collections.NewSortedSlice(2)
+	ss, _ := gorivets.NewSortedSlice(2)
 	c.Assert(getLogLevelSetting("a", ss), IsNil)
 
 	setLogLevel(INFO, "b", ss)

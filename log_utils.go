@@ -47,12 +47,12 @@ func ancestor(checkedName, loggerName string) bool {
 	return false
 }
 
-func getNearestAncestor(comparator gorivets.Comparator, names *gorivets.SortedSlice) logNameProvider {
+func getNearestAncestor(comparable gorivets.Comparable, names *gorivets.SortedSlice) logNameProvider {
 	if names.Len() == 0 {
 		return nil
 	}
-	nProvider := comparator.(logNameProvider)
-	for idx := gorivets.Min(names.Len()-1, names.GetInsertPos(nProvider.(gorivets.Comparator))); idx >= 0; idx-- {
+	nProvider := comparable.(logNameProvider)
+	for idx := gorivets.Min(names.Len()-1, names.GetInsertPos(nProvider.(gorivets.Comparable))); idx >= 0; idx-- {
 		candidate := names.At(idx).(logNameProvider)
 		if ancestor(candidate.name(), nProvider.name()) {
 			return candidate

@@ -98,7 +98,7 @@ func (lc *logContext) name() string {
 	return lc.loggerName
 }
 
-// Comparator implementation
-func (lc *logContext) Compare(other gorivets.Comparator) int {
+// Comparable implementation
+func (lc *logContext) Compare(other gorivets.Comparable) int {
 	return compare(lc, other.(*logContext))
 }

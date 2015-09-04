@@ -40,7 +40,7 @@ func (lls *logLevelSetting) name() string {
 	return lls.loggerName
 }
 
-// Comparator implementation
-func (lls *logLevelSetting) Compare(other gorivets.Comparator) int {
+// Comparable implementation
+func (lls *logLevelSetting) Compare(other gorivets.Comparable) int {
 	return compare(lls, other.(*logLevelSetting))
 }

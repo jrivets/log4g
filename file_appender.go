@@ -93,7 +93,7 @@ type chunkInfo struct {
 	size int64
 }
 
-func (ci *chunkInfo) Compare(other gorivets.Comparator) int {
+func (ci *chunkInfo) Compare(other gorivets.Comparable) int {
 	return ci.id - other.(*chunkInfo).id
 }
 

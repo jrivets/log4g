@@ -111,7 +111,7 @@ func (nus *nameUtilsSuite) name() string {
 	return nus.loggerName
 }
 
-func (nus *nameUtilsSuite) Compare(other gorivets.Comparator) int {
+func (nus *nameUtilsSuite) Compare(other gorivets.Comparable) int {
 	return compare(nus, other.(*nameUtilsSuite))
 }
 

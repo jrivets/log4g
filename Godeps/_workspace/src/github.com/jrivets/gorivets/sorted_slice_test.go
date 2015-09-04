@@ -16,7 +16,7 @@ type paramType struct {
 	v int
 }
 
-func (p1 *paramType) Compare(val Comparator) int {
+func (p1 *paramType) Compare(val Comparable) int {
 	p2v := val.(*paramType).v
 	switch {
 	case p1.v < p2v:
@@ -43,11 +43,11 @@ func (s *sortedSliceSuite) TestNewSortedSliceByParams(c *C) {
 	c.Assert(ss, IsNil)
 	c.Assert(err, NotNil)
 
-	ss, err = NewSortedSliceByParams(make([]Comparator, 1)...)
+	ss, err = NewSortedSliceByParams(make([]interface{}, 1)...)
 	c.Assert(ss, NotNil)
 	c.Assert(err, IsNil)
 
-	ss, err = NewSortedSliceByParams([]Comparator{&paramType{2}, &paramType{1}}...)
+	ss, err = NewSortedSliceByParams([]interface{}{&paramType{2}, &paramType{1}}...)
 	c.Assert(ss.Len(), Equals, 2)
 	c.Assert(ss.At(0).(*paramType).v, Equals, 1)
 	c.Assert(ss.At(1).(*paramType).v, Equals, 2)

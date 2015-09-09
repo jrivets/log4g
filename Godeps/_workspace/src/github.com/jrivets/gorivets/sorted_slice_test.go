@@ -75,6 +75,24 @@ func (s *sortedSliceSuite) TestAdd(c *C) {
 	c.Assert(ss.At(1).(*paramType).v, Equals, 3)
 }
 
+func (s *sortedSliceSuite) TestReverseAdd(c *C) {
+	ss, _ := NewSortedSliceByComp(func(v1, v2 interface{}) int {
+		p1 := v1.(*paramType)
+		p2 := v2.(*paramType)
+		return p2.Compare(p1)
+	}, 1)
+	ss.Add(nil)
+	c.Assert(ss.Len(), Equals, 0)
+
+	ss.Add(&paramType{3})
+	c.Assert(ss.Len(), Equals, 1)
+
+	ss.Add(&paramType{1})
+	c.Assert(ss.Len(), Equals, 2)
+	c.Assert(ss.At(0).(*paramType).v, Equals, 3)
+	c.Assert(ss.At(1).(*paramType).v, Equals, 1)
+}
+
 func (s *sortedSliceSuite) TestFind(c *C) {
 	ss, _ := NewSortedSlice(1)
 	ss.Add(&paramType{3})

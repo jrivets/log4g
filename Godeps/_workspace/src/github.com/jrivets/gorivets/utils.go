@@ -6,23 +6,15 @@ import (
 	"strings"
 )
 
-// The Comparator interface is used in collections to compare element if some ordering is needed
-// please see `SortedSlice` as an example
-type Comparator interface {
-
-	// Compare 2 objects a and b and returns a value(val): val < 0 if a < b, val == 0 if a == b, and val > 0 if a > b
-	Compare(a, b interface{}) int
-}
+// CompareF is used in collections to compare elements if some ordering is needed
+// please see `SortedSlice` as an example. It compares 2 objects a and b and returns a value(val): val < 0 if a < b, val == 0 if a == b, and val > 0 if a > b
+type CompareF func(a, b interface{}) int
 
 type Comparable interface {
 	Compare(other Comparable) int
 }
 
-type comparableComparator struct{}
-
-var cc *comparableComparator = &comparableComparator{}
-
-func (*comparableComparator) Compare(a, b interface{}) int {
+var ccf = func(a, b interface{}) int {
 	return a.(Comparable).Compare(b.(Comparable))
 }
 

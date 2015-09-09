@@ -6,30 +6,30 @@ import (
 )
 
 type SortedSlice struct {
-	comp Comparator
-	data []interface{}
+	compF CompareF
+	data  []interface{}
 }
 
-func NewSortedSliceByComp(comp Comparator, initialCapacity int) (*SortedSlice, error) {
+func NewSortedSliceByComp(compF CompareF, initialCapacity int) (*SortedSlice, error) {
 	if initialCapacity <= 0 {
 		return nil, errors.New("initialCapacity=" + strconv.Itoa(initialCapacity) + " should not be negative integer.")
 	}
-	return &SortedSlice{comp: comp, data: make([]interface{}, 0, initialCapacity)}, nil
+	return &SortedSlice{compF: compF, data: make([]interface{}, 0, initialCapacity)}, nil
 }
 
 func NewSortedSlice(initialCapacity int) (*SortedSlice, error) {
-	return NewSortedSliceByComp(cc, initialCapacity)
+	return NewSortedSliceByComp(ccf, initialCapacity)
 }
 
 func NewSortedSliceByParams(data ...interface{}) (*SortedSlice, error) {
-	return NewSortedSliceByCompAndParams(cc, data...)
+	return NewSortedSliceByCompAndParams(ccf, data...)
 }
 
-func NewSortedSliceByCompAndParams(comp Comparator, data ...interface{}) (*SortedSlice, error) {
+func NewSortedSliceByCompAndParams(compF CompareF, data ...interface{}) (*SortedSlice, error) {
 	if data == nil {
 		return nil, errors.New("Cannot create SortedSlice from data=nil")
 	}
-	ss := &SortedSlice{comp: comp, data: make([]interface{}, 0, len(data))}
+	ss := &SortedSlice{compF: compF, data: make([]interface{}, 0, len(data))}
 	for _, val := range data {
 		ss.Add(val)
 	}
@@ -92,7 +92,7 @@ func (ss *SortedSlice) GetInsertPos(val interface{}) int {
 		return 0
 	}
 
-	if ss.comp.Compare(val, ss.data[len-1]) >= 0 {
+	if ss.compF(val, ss.data[len-1]) >= 0 {
 		return len
 	}
 
@@ -109,7 +109,7 @@ func (ss *SortedSlice) binarySearch(val interface{}) int {
 	for l <= h {
 		m := (l + h) >> 1
 		vm := ss.data[m]
-		c := ss.comp.Compare(val, vm)
+		c := ss.compF(val, vm)
 		switch {
 		case c < 0:
 			h = m - 1

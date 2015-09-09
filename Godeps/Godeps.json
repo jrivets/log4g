@@ -4,7 +4,7 @@
 	"Deps": [
 		{
 			"ImportPath": "github.com/jrivets/gorivets",
-			"Rev": "bb0d319799229ba0685d5562d74e8ba653abb794"
+			"Rev": "436214637e2ef8c005781ca9bf7d24f4ed5d2f4c"
 		},
 		{
 			"ImportPath": "gopkg.in/check.v1",

@@ -1,6 +1,7 @@
 package log4g
 
 import (
+	"github.com/jrivets/log4g/Godeps/_workspace/src/github.com/jrivets/gorivets"
 	. "github.com/jrivets/log4g/Godeps/_workspace/src/gopkg.in/check.v1"
 	"strings"
 )
@@ -53,7 +54,7 @@ func (s *logConfigSuite) TestGetAppendersFromList(c *C) {
 	lc.appenders["b"] = &testAppender{"b"}
 	lc.appenders["c"] = &testAppender{"c"}
 
-	ok := checkPanic(func() { lc.getAppendersFromList("e") })
+	ok := gorivets.CheckPanic(func() { lc.getAppendersFromList("e") })
 	c.Assert(ok, Equals, true)
 
 	apps := lc.getAppendersFromList("  ")
@@ -119,7 +120,7 @@ func (s *logConfigSuite) TestCreateLoggers(c *C) {
 	c.Assert(lc.getLogger("a.b.c").(*logger).logLevel, Equals, TRACE)
 	c.Assert(lc.getLogger("b.c.d").(*logger).logLevel, Equals, DEBUG)
 
-	pnc := checkPanic(
+	pnc := gorivets.CheckPanic(
 		func() {
 			lc.createLoggers(map[string]string{
 				"logger.a.b.c.level": "ABC",
@@ -149,7 +150,7 @@ func (s *logConfigSuite) TestCreateContexts(c *C) {
 }
 
 func panicWhenCreateContext(c *C, lc *logConfig, params map[string]string) {
-	pnc := checkPanic(
+	pnc := gorivets.CheckPanic(
 		func() {
 			lc.createContexts(params)
 		})
@@ -164,13 +165,13 @@ func (s *logConfigSuite) TestCreateAppenders(c *C) {
 	lc.createAppenders(nil)
 	lc.createAppenders(map[string]string{"appender.ROOT.type": consoleAppenderName})
 
-	pnc := checkPanic(
+	pnc := gorivets.CheckPanic(
 		func() {
 			lc.createAppenders(map[string]string{"appender.ROOT.type": "unknown appender"})
 		})
 	c.Assert(pnc, Equals, true)
 
-	pnc = checkPanic(
+	pnc = gorivets.CheckPanic(
 		func() {
 			lc.createAppenders(map[string]string{"appender.ROOT.layot": "unknown layout %$"})
 		})
@@ -201,7 +202,7 @@ func checkLevelMapVsLevelName(c *C, lc *logConfig) {
 }
 
 func panicWhenApplyLevelParams(c *C, lc *logConfig, params map[string]string) {
-	pnc := checkPanic(
+	pnc := gorivets.CheckPanic(
 		func() {
 			lc.applyLevelParams(params)
 		})

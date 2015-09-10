@@ -54,7 +54,7 @@ func (s *nameUtilsSuite) TestGetConfigParamName(c *C) {
 	c.Assert(ok, Equals, true)
 	c.Assert(ctx, Equals, "")
 
-	ok = checkPanic(func() { getConfigParamName("appender..test", "appender", isCorrectAppenderName) })
+	ok = gorivets.CheckPanic(func() { getConfigParamName("appender..test", "appender", isCorrectAppenderName) })
 	c.Assert(ok, Equals, true)
 
 	ctx, ok = getConfigParamName("context...test", "context", nil)
@@ -113,12 +113,4 @@ func (nus *nameUtilsSuite) name() string {
 
 func (nus *nameUtilsSuite) Compare(other gorivets.Comparable) int {
 	return compare(nus, other.(*nameUtilsSuite))
-}
-
-func checkPanic(f func()) (result bool) {
-	defer func() {
-		result = recover() != nil
-	}()
-	f()
-	return
 }

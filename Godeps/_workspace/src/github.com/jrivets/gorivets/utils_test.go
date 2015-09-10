@@ -1,6 +1,7 @@
 package gorivets
 
 import (
+	"errors"
 	. "github.com/jrivets/log4g/Godeps/_workspace/src/gopkg.in/check.v1"
 )
 
@@ -89,4 +90,9 @@ func (s *utilsSuite) TestParseBool(c *C) {
 	v, err = ParseBool("", true)
 	c.Assert(err, IsNil)
 	c.Assert(v, Equals, true)
+}
+
+func (s *utilsSuite) TestAssertNotNull(c *C) {
+	c.Assert(CheckPanic(func() { AssertNoError(nil) }), Equals, false)
+	c.Assert(CheckPanic(func() { AssertNoError(errors.New("ddd")) }), Equals, true)
 }

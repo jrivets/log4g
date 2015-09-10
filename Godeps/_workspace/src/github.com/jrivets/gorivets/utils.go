@@ -38,6 +38,22 @@ func EndQuietly() {
 	recover()
 }
 
+// Calls panic with the error description if the err is not nil
+func AssertNoError(err error) {
+	if err != nil {
+		panic(err.Error())
+	}
+}
+
+// Invokes the function and returns whether it panics or not
+func CheckPanic(f func()) (result bool) {
+	defer func() {
+		result = recover() != nil
+	}()
+	f()
+	return
+}
+
 // Parses boolean value removing leading or trailing spaces if present
 func ParseBool(value string, defaultValue bool) (bool, error) {
 	value = strings.ToLower(strings.Trim(value, " "))

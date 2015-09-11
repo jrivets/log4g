@@ -55,7 +55,7 @@ func (s *logConfigSuite) TestGetAppendersFromList(c *C) {
 	lc.appenders["c"] = &testAppender{"c"}
 
 	ok := gorivets.CheckPanic(func() { lc.getAppendersFromList("e") })
-	c.Assert(ok, Equals, true)
+	c.Assert(ok, NotNil)
 
 	apps := lc.getAppendersFromList("  ")
 	c.Assert(len(apps), Equals, 0)
@@ -126,7 +126,7 @@ func (s *logConfigSuite) TestCreateLoggers(c *C) {
 				"logger.a.b.c.level": "ABC",
 			})
 		})
-	c.Assert(pnc, Equals, true)
+	c.Assert(pnc, NotNil)
 }
 
 func (s *logConfigSuite) TestCreateContexts(c *C) {
@@ -154,7 +154,7 @@ func panicWhenCreateContext(c *C, lc *logConfig, params map[string]string) {
 		func() {
 			lc.createContexts(params)
 		})
-	c.Assert(pnc, Equals, true)
+	c.Assert(pnc, NotNil)
 }
 
 func (s *logConfigSuite) TestCreateAppenders(c *C) {
@@ -169,13 +169,13 @@ func (s *logConfigSuite) TestCreateAppenders(c *C) {
 		func() {
 			lc.createAppenders(map[string]string{"appender.ROOT.type": "unknown appender"})
 		})
-	c.Assert(pnc, Equals, true)
+	c.Assert(pnc, NotNil)
 
 	pnc = gorivets.CheckPanic(
 		func() {
 			lc.createAppenders(map[string]string{"appender.ROOT.layot": "unknown layout %$"})
 		})
-	c.Assert(pnc, Equals, true)
+	c.Assert(pnc, NotNil)
 }
 
 func (s *logConfigSuite) TestApplyLevelParams(c *C) {
@@ -206,7 +206,7 @@ func panicWhenApplyLevelParams(c *C, lc *logConfig, params map[string]string) {
 		func() {
 			lc.applyLevelParams(params)
 		})
-	c.Assert(pnc, Equals, true)
+	c.Assert(pnc, NotNil)
 }
 
 type testAppender struct {

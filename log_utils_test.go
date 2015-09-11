@@ -54,8 +54,8 @@ func (s *nameUtilsSuite) TestGetConfigParamName(c *C) {
 	c.Assert(ok, Equals, true)
 	c.Assert(ctx, Equals, "")
 
-	ok = gorivets.CheckPanic(func() { getConfigParamName("appender..test", "appender", isCorrectAppenderName) })
-	c.Assert(ok, Equals, true)
+	panicTest := gorivets.CheckPanic(func() { getConfigParamName("appender..test", "appender", isCorrectAppenderName) })
+	c.Assert(panicTest, NotNil)
 
 	ctx, ok = getConfigParamName("context...test", "context", nil)
 	c.Assert(ok, Equals, true)

@@ -46,9 +46,13 @@ func AssertNoError(err error) {
 }
 
 // Invokes the function and returns whether it panics or not
-func CheckPanic(f func()) (result bool) {
+func CheckPanic(f func()) (result interface{}) {
 	defer func() {
-		result = recover() != nil
+		r := recover()
+		if r == nil {
+			return
+		}
+		result = r
 	}()
 	f()
 	return

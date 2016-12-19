@@ -1,6 +1,6 @@
 package log4g
 
-import "github.com/jrivets/log4g/Godeps/_workspace/src/github.com/jrivets/gorivets"
+import "github.com/jrivets/gorivets"
 
 type logLevelSetting struct {
 	loggerName string

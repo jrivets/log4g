@@ -1,10 +1,11 @@
 {
 	"ImportPath": "github.com/jrivets/log4g",
-	"GoVersion": "go1.5",
+	"GoVersion": "go1.7",
+	"GodepVersion": "v75",
 	"Deps": [
 		{
 			"ImportPath": "github.com/jrivets/gorivets",
-			"Rev": "e8a969a3c4a6310054eebe32168ec9792a9142d3"
+			"Rev": "19a83fc7733e13dbb9def0b01e5eed03b20608f0"
 		},
 		{
 			"ImportPath": "gopkg.in/check.v1",

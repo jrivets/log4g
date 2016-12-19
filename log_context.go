@@ -2,7 +2,7 @@ package log4g
 
 import (
 	"errors"
-	"github.com/jrivets/log4g/Godeps/_workspace/src/github.com/jrivets/gorivets"
+	"github.com/jrivets/gorivets"
 	"strconv"
 )
 

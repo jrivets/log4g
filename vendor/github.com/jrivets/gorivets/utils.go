@@ -2,6 +2,7 @@ package gorivets
 
 import (
 	"errors"
+	"reflect"
 	"strconv"
 	"strings"
 )
@@ -43,6 +44,26 @@ func AssertNoError(err error) {
 	if err != nil {
 		panic(err.Error())
 	}
+}
+
+func AssertNotNil(inf interface{}) {
+	AssertNotNilMsg(inf, "nil")
+}
+
+func AssertNotNilMsg(inf interface{}, msg string) {
+	if IsNil(inf) {
+		panic(msg)
+	}
+}
+
+func IsNil(inf interface{}) bool {
+	if inf == nil {
+		return true
+	}
+	if !reflect.ValueOf(inf).Elem().IsValid() {
+		return true
+	}
+	return false
 }
 
 // Invokes the function and returns whether it panics or not

@@ -2,9 +2,10 @@ package log4g
 
 import (
 	"errors"
-	"github.com/jrivets/gorivets"
 	"strconv"
 	"strings"
+
+	"github.com/jrivets/gorivets"
 )
 
 type logConfig struct {
@@ -194,7 +195,7 @@ func (lc *logConfig) createContexts(params map[string]string) {
 			}
 		}
 
-		bufSize, err := gorivets.ParseInt64(ctxAttributes[cfgContextBufSize], 0, 100000, 100)
+		bufSize, err := gorivets.ParseInt64(ctxAttributes[cfgContextBufSize], 0, 100000, 0)
 		if err != nil {
 			panic("Incorrect buffer size=" + ctxAttributes[cfgContextBufSize] +
 				" value for context \"" + logName + "\" should be positive integer: " + err.Error())

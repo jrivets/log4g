@@ -1,9 +1,10 @@
 package log4g
 
 import (
+	"time"
+
 	"github.com/jrivets/gorivets"
 	. "gopkg.in/check.v1"
-	"time"
 )
 
 type logContextSuite struct {
@@ -25,7 +26,7 @@ func (s *logContextSuite) TestNewLogContext(c *C) {
 
 	appenders = append(appenders, s)
 	c.Assert(len(appenders), Equals, 1)
-	lc, err = newLogContext("abc", appenders, true, true, 0)
+	lc, err = newLogContext("abc", appenders, true, true, -1)
 	c.Assert(lc, IsNil)
 	c.Assert(err, NotNil)
 }

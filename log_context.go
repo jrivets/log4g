@@ -2,8 +2,9 @@ package log4g
 
 import (
 	"errors"
-	"github.com/jrivets/gorivets"
 	"strconv"
+
+	"github.com/jrivets/gorivets"
 )
 
 type logContext struct {
@@ -13,11 +14,12 @@ type logContext struct {
 	blocking   bool
 	eventsCh   chan *Event
 	controlCh  chan bool
+	sync       bool
 }
 
 func newLogContext(loggerName string, appenders []Appender, inherited, blocking bool, bufSize int) (*logContext, error) {
-	if bufSize <= 0 {
-		return nil, errors.New("Cannot create channel with non-positive size=" + strconv.Itoa(bufSize))
+	if bufSize < 0 {
+		return nil, errors.New("Cannot create channel with negative size=" + strconv.Itoa(bufSize))
 	}
 
 	if appenders == nil || len(appenders) == 0 {
@@ -26,7 +28,7 @@ func newLogContext(loggerName string, appenders []Appender, inherited, blocking 
 
 	eventsCh := make(chan *Event, bufSize)
 	controlCh := make(chan bool, 1)
-	lc := &logContext{loggerName, appenders, inherited, blocking, eventsCh, controlCh}
+	lc := &logContext{loggerName, appenders, inherited, blocking, eventsCh, controlCh, blocking && bufSize == 0}
 
 	go func() {
 		defer onStop(controlCh)
@@ -62,6 +64,11 @@ func (lc *logContext) log(le *Event) (result bool) {
 	// Channel can be already closed, so end quietly
 	result = false
 	defer gorivets.EndQuietly()
+
+	if lc.sync {
+		lc.onEvent(le)
+		return true
+	}
 
 	if lc.blocking {
 		lc.eventsCh <- le

@@ -3,9 +3,10 @@ package log4g
 import (
 	"errors"
 	"fmt"
-	"github.com/jrivets/gorivets"
 	"io"
 	"os"
+
+	"github.com/jrivets/gorivets"
 )
 
 const consoleAppenderName = "log4g/consoleAppender"
@@ -14,8 +15,13 @@ const consoleAppenderName = "log4g/consoleAppender"
 // transformation
 const CAParamLayout = "layout"
 
+// async - defines whether the appender will block the logging call, or do
+// it asynchronously
+const CAParamAsync = "async"
+
 type consoleAppender struct {
 	layoutTemplate LayoutTemplate
+	async          bool
 }
 
 type consoleAppenderFactory struct {
@@ -40,9 +46,13 @@ func init() {
 			if !ok {
 				break
 			}
-			fmt.Fprint(caFactory.out, str, "\n")
+			caFactory.write(str)
 		}
 	}()
+}
+
+func (f *consoleAppenderFactory) write(str string) {
+	fmt.Fprint(f.out, str, "\n")
 }
 
 func (*consoleAppenderFactory) Name() string {
@@ -60,11 +70,21 @@ func (caf *consoleAppenderFactory) NewAppender(params map[string]string) (Append
 		return nil, errors.New("Cannot create console appender: " + err.Error())
 	}
 
-	return &consoleAppender{layoutTemplate}, nil
+	asyncParam, ok := params[CAParamAsync]
+	var async bool = false
+	if ok && asyncParam != "" {
+		pasync, err := gorivets.ParseBool(asyncParam, true)
+		if err != nil {
+			async = pasync
+		}
+	}
+
+	return &consoleAppender{layoutTemplate, async}, nil
 }
 
 func (caf *consoleAppenderFactory) Shutdown() {
 	close(caf.msgChannel)
+	caFactory.msgChannel = nil
 }
 
 // Appender interface implementation
@@ -72,8 +92,12 @@ func (cAppender *consoleAppender) Append(event *Event) (ok bool) {
 	ok = false
 	defer gorivets.EndQuietly()
 	msg := ToLogMessage(event, cAppender.layoutTemplate)
-	caFactory.msgChannel <- msg
-	ok = true
+	if cAppender.async {
+		caFactory.msgChannel <- msg
+	} else {
+		caFactory.write(msg)
+	}
+	ok = caFactory.msgChannel != nil
 	return ok
 }
 

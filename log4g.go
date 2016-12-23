@@ -49,6 +49,7 @@ type Logger interface {
 	Log(level Level, args ...interface{})
 	Logf(level Level, fstr string, args ...interface{})
 	Logp(level Level, payload interface{})
+	GetName() string
 }
 
 // Event is DTO, bearing a log message between the log4g components. This

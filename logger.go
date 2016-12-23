@@ -61,6 +61,10 @@ func (l *logger) Logp(level Level, payload interface{}) {
 	l.logInternal(level, payload)
 }
 
+func (l *logger) GetName() string {
+	return l.loggerName
+}
+
 func (l *logger) logInternal(level Level, payload interface{}) {
 	l.lctx.log(&Event{level, time.Now(), l.loggerName, payload})
 }

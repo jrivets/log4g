@@ -3,10 +3,14 @@ package log4g
 import (
 	"bufio"
 	"errors"
+	"fmt"
 	"os"
+	"reflect"
 	"strconv"
 	"strings"
 	"sync"
+
+	"github.com/jrivets/gorivets"
 )
 
 type logManager struct {
@@ -15,6 +19,24 @@ type logManager struct {
 }
 
 var lm *logManager = &logManager{config: newLogConfig()}
+
+func init() {
+	lm.registerInGMap()
+}
+
+func (lm *logManager) registerInGMap() {
+	inst, ok := gorivets.GMapPut("log4g", lm)
+	if ok {
+		var pkg string
+		if inst != nil {
+			o := reflect.ValueOf(inst).Type()
+			pkg = fmt.Sprint(o)
+		}
+
+		panic(errors.New("Your application is not correctly linked. Different versions of log4g are detected. " +
+			"There is an log4g instance which is vendored to \"" + pkg + "\" package."))
+	}
+}
 
 func (lm *logManager) getLogger(loggerName string) Logger {
 	lm.rwLock.Lock()
@@ -47,6 +69,8 @@ func (lm *logManager) shutdown() {
 	for _, af := range lm.config.appenderFactorys {
 		af.Shutdown()
 	}
+
+	gorivets.GMapDelete("log4g")
 }
 
 func (lm *logManager) setPropsFromFile(configFileName string) error {

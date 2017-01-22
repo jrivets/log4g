@@ -18,10 +18,25 @@ type logManager struct {
 	rwLock sync.RWMutex
 }
 
-var lm *logManager = &logManager{config: newLogConfig()}
+var __lm *logManager
+var __lm_lock sync.Mutex
 
-func init() {
+func lm() *logManager {
+	if __lm != nil {
+		return __lm
+	}
+
+	__lm_lock.Lock()
+	defer __lm_lock.Unlock()
+
+	if __lm != nil {
+		return __lm
+	}
+	lm := &logManager{config: newLogConfig()}
 	lm.registerInGMap()
+	__lm = lm
+
+	return __lm
 }
 
 func (lm *logManager) registerInGMap() {
@@ -34,7 +49,7 @@ func (lm *logManager) registerInGMap() {
 		}
 
 		panic(errors.New("Your application is not correctly linked. Different versions of log4g are detected. " +
-			"There is an log4g instance which is vendored to \"" + pkg + "\" package."))
+			"There is a log4g instance which is vendored to \"" + pkg + "\" package."))
 	}
 }
 

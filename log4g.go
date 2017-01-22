@@ -85,14 +85,14 @@ type AppenderFactory interface {
 // returns false if the level is out of the acceptable range, or true if the
 // name is applied.
 func SetLogLevelName(level Level, name string) bool {
-	return lm.setLogLevelName(int(level), name)
+	return lm().setLogLevelName(int(level), name)
 }
 
 // GetLogger returns pointer to the Logger object for specified logger name.
 // The function will always return the same pointer for the same logger's name
 // regardless of log4g configuration or other settings
 func GetLogger(loggerName string) Logger {
-	return lm.getLogger(loggerName)
+	return lm().getLogger(loggerName)
 }
 
 // SetLogLevel allows to set specified level for the provided logger name.
@@ -129,7 +129,7 @@ func GetLogger(loggerName string) Logger {
 // its log level from an ancestor in the logger name tree if its own log level
 // was not set before!
 func SetLogLevel(loggerName string, level Level) {
-	lm.setLogLevel(loggerName, level)
+	lm().setLogLevel(loggerName, level)
 }
 
 // RegisterAppender allows to register an appender implementation in log4g.
@@ -141,23 +141,23 @@ func SetLogLevel(loggerName string, level Level) {
 //		appenderFactory - a factory object which allows to create new instances of
 //    	the appender type.
 func RegisterAppender(appenderFactory AppenderFactory) error {
-	return lm.registerAppender(appenderFactory)
+	return lm().registerAppender(appenderFactory)
 }
 
 // ConfigF reads log4g configuration properties from text file, which name is provided in
 // configFileName parameter.
 func ConfigF(configFileName string) error {
-	return lm.setPropsFromFile(configFileName)
+	return lm().setPropsFromFile(configFileName)
 }
 
 // Config allows to configure log4g by properties provided in the key:value form
 func Config(props map[string]string) error {
-	return lm.setNewProperties(props)
+	return lm().setNewProperties(props)
 }
 
 // Should be called to shutdown log subsystem properly. It will notify all logContexts and wait
 // while all go routines that deliver messages to appenders are over. Calling this method could
 // be essential to finalize some appenders and release their resources properly
 func Shutdown() {
-	lm.shutdown()
+	lm().shutdown()
 }

@@ -33,7 +33,7 @@ type LayoutTemplate []layoutPiece
 var logLevelNames []string
 
 func init() {
-	logLevelNames = lm.config.levelNames
+	logLevelNames = lm().config.levelNames
 }
 
 // ParseLayout parses the layout parameter and returns LayoutTemplate instance

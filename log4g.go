@@ -49,7 +49,26 @@ type Logger interface {
 	Log(level Level, args ...interface{})
 	Logf(level Level, fstr string, args ...interface{})
 	Logp(level Level, payload interface{})
+
 	GetName() string
+
+	// Returns logger with same name, but with specified id. The logger allows
+	// to compose log messages with the specified id value. Having such id allows
+	// to distinguish messages which were printed in different contexts
+	//
+	// l := log4g.GetLogger("ab.c")
+	// l.Info("Hello World!") // Will print "INFO ab.c: Hello World!"
+	// ...
+	// aContext.SetId("{123489-1234-abcdc343}")
+	// ...
+	// l2 := l.WithId(aContext.GetId())
+	// l2.Info("Hello with a context ID...") // Will print "INFO ab.c{123489-1234-abcdc343}: Hello with a context ID..."
+	//
+	WithId(id interface{}) Logger
+
+	// Returns logger by specified name. This is a fabric function for loggers
+	// produced from an existing one. The new one inherits the logger id value
+	WithName(name string) Logger
 }
 
 // Event is DTO, bearing a log message between the log4g components. This
@@ -61,7 +80,7 @@ type Event struct {
 	Timestamp  time.Time
 	LoggerName string
 
-	// The id identifiers a source of the log message if it's specified. The Id can
+	// The id identifies a source of the log message if it's specified. The Id can
 	// be different for same logger names to distinguish messages produced for
 	// different contexts.
 	Id      interface{}
@@ -135,25 +154,6 @@ func GetLogger(loggerName string) Logger {
 // was not set before!
 func SetLogLevel(loggerName string, level Level) {
 	lm().setLogLevel(loggerName, level)
-}
-
-// Sets LoggerId for provided Logger object. The loggerId allows to construct
-// loggers with an identifier and prints log messages with the id. It allows to
-// distinguish messages which were printed in different contexts
-//
-// l := log4g.GetLogger("ab.c")
-// l.Info("Hello World!") // Will print "INFO ab.c: Hello World!"
-// ...
-// l2 := SetLoggerId(l, "{123489-1234-abcdc343}")
-// l2.Info("Hello World!") // Will print "INFO ab.c{123489-1234-abcdc343}: Hello World!"
-//
-func SetLoggerId(log Logger, id interface{}) Logger {
-	lg := log.(*logger)
-	if lg != nil {
-		lg = lg.clone()
-		lg.loggerId = id
-	}
-	return lg
 }
 
 // RegisterAppender allows to register an appender implementation in log4g.

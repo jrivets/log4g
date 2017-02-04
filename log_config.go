@@ -246,14 +246,14 @@ func (lc *logConfig) applyLevelsAndContexts() {
 	}
 }
 
-func (lc *logConfig) getLogger(loggerName string) Logger {
+func (lc *logConfig) getLogger(loggerName string) *logger {
 	loggerName = normalizeLogName(loggerName)
 	l, ok := lc.loggers[loggerName]
 	if !ok {
 		// Create new logger for the name
 		rootLLS := getLogLevelSetting(loggerName, lc.logLevels)
 		rootCtx := getLogLevelContext(loggerName, lc.logContexts)
-		l = &logger{loggerName, rootLLS, rootCtx, rootLLS.level, ""}
+		l = &logger{loggerName, rootLLS, rootCtx, rootLLS.level}
 		lc.loggers[loggerName] = l
 	}
 	return l

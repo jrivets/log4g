@@ -1,9 +1,10 @@
 package log4g
 
 import (
+	"strings"
+
 	"github.com/jrivets/gorivets"
 	. "gopkg.in/check.v1"
-	"strings"
 )
 
 type logConfigSuite struct {
@@ -87,12 +88,12 @@ func (s *logConfigSuite) TestSetLogLevel(c *C) {
 	l := lc.getLogger("a")
 
 	lc.setLogLevel(DEBUG, "a.b")
-	c.Assert(lc.getLogger("a.b.c").(*logger).logLevel, Equals, DEBUG)
-	c.Assert(l.(*logger).logLevel, Equals, INFO)
+	c.Assert(lc.getLogger("a.b.c").logLevel, Equals, DEBUG)
+	c.Assert(l.logLevel, Equals, INFO)
 
 	lc.setLogLevel(WARN, "a")
-	c.Assert(l.(*logger).logLevel, Equals, WARN)
-	c.Assert(lc.getLogger("a.b.c").(*logger).logLevel, Equals, DEBUG)
+	c.Assert(l.logLevel, Equals, WARN)
+	c.Assert(lc.getLogger("a.b.c").logLevel, Equals, DEBUG)
 }
 
 func (s *logConfigSuite) TestGetLogger(c *C) {
@@ -117,8 +118,8 @@ func (s *logConfigSuite) TestCreateLoggers(c *C) {
 		"logger.b.c.d.level": "DEBUG",
 	}
 	lc.createLoggers(params)
-	c.Assert(lc.getLogger("a.b.c").(*logger).logLevel, Equals, TRACE)
-	c.Assert(lc.getLogger("b.c.d").(*logger).logLevel, Equals, DEBUG)
+	c.Assert(lc.getLogger("a.b.c").logLevel, Equals, TRACE)
+	c.Assert(lc.getLogger("b.c.d").logLevel, Equals, DEBUG)
 
 	pnc := gorivets.CheckPanic(
 		func() {

@@ -58,7 +58,8 @@ func (lm *logManager) getLogger(loggerName string) Logger {
 	defer lm.rwLock.Unlock()
 
 	lm.config.initIfNeeded()
-	return lm.config.getLogger(loggerName)
+	l := lm.config.getLogger(loggerName)
+	return wrap(l)
 }
 
 func (lm *logManager) setLogLevel(loggerName string, level Level) {

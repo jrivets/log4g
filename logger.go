@@ -10,6 +10,17 @@ type logger struct {
 	lls        *logLevelSetting
 	lctx       *logContext
 	logLevel   Level
+	loggerId   interface{}
+}
+
+func (l *logger) clone() *logger {
+	log := &logger{}
+	log.loggerName = l.loggerName
+	log.lls = l.lls
+	log.lctx = l.lctx
+	log.logLevel = l.logLevel
+	log.loggerId = l.loggerId
+	return log
 }
 
 func (l *logger) Fatal(args ...interface{}) {
@@ -66,7 +77,7 @@ func (l *logger) GetName() string {
 }
 
 func (l *logger) logInternal(level Level, payload interface{}) {
-	l.lctx.log(&Event{level, time.Now(), l.loggerName, payload})
+	l.lctx.log(&Event{level, time.Now(), l.loggerName, l.loggerId, payload})
 }
 
 func (l *logger) setLogLevelSetting(lls *logLevelSetting) {

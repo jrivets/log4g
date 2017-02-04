@@ -1,8 +1,9 @@
 package log4g
 
 import (
-	. "gopkg.in/check.v1"
 	"time"
+
+	. "gopkg.in/check.v1"
 )
 
 type layoutUtilsSuite struct {
@@ -63,7 +64,10 @@ func (s *layoutUtilsSuite) TestParseLayout(c *C) {
 func (s *layoutUtilsSuite) TestToLogMessage(c *C) {
 	testTime := time.Unix(123456, 0)
 	expectedTime := testTime.Format("[01-02 15:04:05.000]")
-	t, _ := ParseLayout("[%d{01-02 15:04:05.000}] %p %c: %%%m")
-	le := &Event{FATAL, testTime, "a.b.c", "The Message"}
+	t, _ := ParseLayout("[%d{01-02 15:04:05.000}] %p %c%i: %%%m")
+	le := &Event{FATAL, testTime, "a.b.c", "", "The Message"}
 	c.Assert(ToLogMessage(le, t), Equals, expectedTime+" FATAL a.b.c: %The Message")
+
+	le = &Event{FATAL, testTime, "a.b.c", "-1234-1234", "The Message"}
+	c.Assert(ToLogMessage(le, t), Equals, expectedTime+" FATAL a.b.c-1234-1234: %The Message")
 }

@@ -13,6 +13,7 @@ const (
 	lpDate
 	lpLogLevel
 	lpMessage
+	lpLoggerId
 )
 
 // parse states
@@ -44,6 +45,7 @@ func init() {
 //				in time.Format() form like "Mon, 02 Jan 2006 15:04:05 -0700"
 // %p - priority name
 // %m - the log message
+// %i - the logger identifier, if it is set up
 // %% - '%'
 //
 // For example, layout string '[%d{01-02 15:04:05.000}] %p %c: %m' will be parsed
@@ -75,6 +77,8 @@ func ParseLayout(layout string) (LayoutTemplate, error) {
 				layoutTemplate = addPiece("p", lpLogLevel, layoutTemplate)
 			case 'm':
 				layoutTemplate = addPiece("m", lpMessage, layoutTemplate)
+			case 'i':
+				layoutTemplate = addPiece("i", lpLoggerId, layoutTemplate)
 			case '%':
 				startIdx = i
 			default:
@@ -126,6 +130,10 @@ func ToLogMessage(logEvent *Event, template LayoutTemplate) string {
 			buf.WriteString(logLevelNames[logEvent.Level])
 		case lpMessage:
 			buf.WriteString(fmt.Sprint(logEvent.Payload))
+		case lpLoggerId:
+			if logEvent.Id != nil {
+				buf.WriteString(fmt.Sprint(logEvent.Id))
+			}
 		}
 	}
 	return buf.String()

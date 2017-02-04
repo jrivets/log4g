@@ -1,8 +1,9 @@
 package log4g
 
 import (
-	. "gopkg.in/check.v1"
 	"time"
+
+	. "gopkg.in/check.v1"
 )
 
 type cAppenderSuite struct {
@@ -39,12 +40,12 @@ func (s *cAppenderSuite) TestAppend(c *C) {
 	a, _ := caFactory.NewAppender(map[string]string{"layout": "[%d{15:04:05.000}] %p %c: %m"})
 	testTime := time.Unix(123456, 0)
 	expectedTime := testTime.Format("[15:04:05.000]")
-	appended := a.Append(&Event{FATAL, testTime, "a.b.c", "Hello Console!"})
+	appended := a.Append(&Event{FATAL, testTime, "a.b.c", "", "Hello Console!"})
 	c.Assert(appended, Equals, true)
 	<-s.signal
 	c.Assert(s.msg, Equals, expectedTime+" FATAL a.b.c: Hello Console!\n")
 
 	caFactory.Shutdown()
-	appended = a.Append(&Event{FATAL, time.Unix(0, 0), "a.b.c", "Never delivered"})
+	appended = a.Append(&Event{FATAL, time.Unix(0, 0), "a.b.c", "", "Never delivered"})
 	c.Assert(appended, Equals, false)
 }

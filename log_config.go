@@ -45,7 +45,7 @@ const (
 const rootLoggerName = ""
 
 var defaultConfigParams = map[string]string{
-	"appender.ROOT.layout": "[%d{01-02 15:04:05.000}] %p %c: %m",
+	"appender.ROOT.layout": "[%d{01-02 15:04:05.000}] %p %c%i: %m",
 	"appender.ROOT.type":   consoleAppenderName,
 	"context.appenders":    "ROOT",
 	"context.level":        "INFO"}
@@ -253,7 +253,7 @@ func (lc *logConfig) getLogger(loggerName string) Logger {
 		// Create new logger for the name
 		rootLLS := getLogLevelSetting(loggerName, lc.logLevels)
 		rootCtx := getLogLevelContext(loggerName, lc.logContexts)
-		l = &logger{loggerName, rootLLS, rootCtx, rootLLS.level}
+		l = &logger{loggerName, rootLLS, rootCtx, rootLLS.level, ""}
 		lc.loggers[loggerName] = l
 	}
 	return l

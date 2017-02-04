@@ -60,7 +60,12 @@ type Event struct {
 	Level      Level
 	Timestamp  time.Time
 	LoggerName string
-	Payload    interface{}
+
+	// The id identifiers a source of the log message if it's specified. The Id can
+	// be different for same logger names to distinguish messages produced for
+	// different contexts.
+	Id      interface{}
+	Payload interface{}
 }
 
 // Appender is an interface for a log endpoint. Different log storages can be
@@ -130,6 +135,25 @@ func GetLogger(loggerName string) Logger {
 // was not set before!
 func SetLogLevel(loggerName string, level Level) {
 	lm().setLogLevel(loggerName, level)
+}
+
+// Sets LoggerId for provided Logger object. The loggerId allows to construct
+// loggers with an identifier and prints log messages with the id. It allows to
+// distinguish messages which were printed in different contexts
+//
+// l := log4g.GetLogger("ab.c")
+// l.Info("Hello World!") // Will print "INFO ab.c: Hello World!"
+// ...
+// l2 := SetLoggerId(l, "{123489-1234-abcdc343}")
+// l2.Info("Hello World!") // Will print "INFO ab.c{123489-1234-abcdc343}: Hello World!"
+//
+func SetLoggerId(log Logger, id interface{}) Logger {
+	lg := log.(*logger)
+	if lg != nil {
+		lg = lg.clone()
+		lg.loggerId = id
+	}
+	return lg
 }
 
 // RegisterAppender allows to register an appender implementation in log4g.

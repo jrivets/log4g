@@ -16,10 +16,10 @@ func (s *loggerSuite) TestApplyNewLevelToLoggers(c *C) {
 	rootLLS := &logLevelSetting{rootLoggerName, INFO}
 
 	loggers := make(map[string]*logger)
-	loggers["a"] = &logger{"a", rootLLS, nil, INFO}
-	loggers["a.b"] = &logger{"a.b", rootLLS, nil, INFO}
-	loggers["a.b.c"] = &logger{"a.b.c", rootLLS, nil, INFO}
-	loggers["a.b.c.d"] = &logger{"a.b.c.d", rootLLS, nil, INFO}
+	loggers["a"] = &logger{"a", rootLLS, nil, INFO, ""}
+	loggers["a.b"] = &logger{"a.b", rootLLS, nil, INFO, ""}
+	loggers["a.b.c"] = &logger{"a.b.c", rootLLS, nil, INFO, ""}
+	loggers["a.b.c.d"] = &logger{"a.b.c.d", rootLLS, nil, INFO, ""}
 
 	applyNewLevelToLoggers(&logLevelSetting{"a.b", DEBUG}, loggers)
 	c.Assert(loggers["a"].logLevel, Equals, INFO)
@@ -37,7 +37,7 @@ func (s *loggerSuite) TestApplyNewLevelToLoggers(c *C) {
 
 func (s *loggerSuite) TestLog(c *C) {
 	lctx := &logContext{eventsCh: make(chan *Event, 1)}
-	l := &logger{"a", nil, lctx, INFO}
+	l := &logger{"a", nil, lctx, INFO, ""}
 	l.Log(INFO, "Hello")
 	go waitThenClose(500, lctx)
 	le, ok := <-lctx.eventsCh
@@ -50,7 +50,7 @@ func (s *loggerSuite) TestLog(c *C) {
 
 func (s *loggerSuite) TestLogDisabled(c *C) {
 	lctx := &logContext{eventsCh: make(chan *Event, 1)}
-	l := &logger{"a", nil, lctx, INFO}
+	l := &logger{"a", nil, lctx, INFO, ""}
 	l.Log(DEBUG, "Hello")
 	go waitThenClose(50, lctx)
 	_, ok := <-lctx.eventsCh
@@ -59,7 +59,7 @@ func (s *loggerSuite) TestLogDisabled(c *C) {
 
 func (s *loggerSuite) TestLogf(c *C) {
 	lctx := &logContext{eventsCh: make(chan *Event, 2)}
-	l := &logger{"a", nil, lctx, INFO}
+	l := &logger{"a", nil, lctx, INFO, ""}
 	l.Logf(INFO, "Hello %s")
 	l.Logf(INFO, "Hello %s", "World!")
 	c.Assert(l.GetName(), Equals, "a")
@@ -75,7 +75,7 @@ func (s *loggerSuite) TestLogf(c *C) {
 
 func (s *loggerSuite) TestLogp(c *C) {
 	lctx := &logContext{eventsCh: make(chan *Event, 1)}
-	l := &logger{"a", nil, lctx, INFO}
+	l := &logger{"a", nil, lctx, INFO, ""}
 	l.Logp(INFO, lctx)
 	go waitThenClose(500, lctx)
 	le, ok := <-lctx.eventsCh
@@ -85,7 +85,7 @@ func (s *loggerSuite) TestLogp(c *C) {
 
 func (s *loggerSuite) TestMessages(c *C) {
 	lctx := &logContext{eventsCh: make(chan *Event, 10)}
-	l := &logger{"a", nil, lctx, TRACE}
+	l := &logger{"a", nil, lctx, TRACE, ""}
 	l.Info(INFO)
 	l.Warn(WARN)
 	l.Debug(DEBUG)

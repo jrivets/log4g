@@ -17,7 +17,9 @@ log4g will use default configuration if no configuration is provided:
 */
 package log4g
 
-import "time"
+import (
+	"time"
+)
 
 // Level type represents logging level as an integer value which lies in [0..70] range.
 // A level with lowest value has higher priority than a level with highest value.
@@ -64,11 +66,11 @@ type Logger interface {
 	// l2 := l.WithId(aContext.GetId())
 	// l2.Info("Hello with a context ID...") // Will print "INFO ab.c{123489-1234-abcdc343}: Hello with a context ID..."
 	//
-	WithId(id interface{}) Logger
+	WithId(id interface{}) interface{}
 
 	// Returns logger by specified name. This is a fabric function for loggers
 	// produced from an existing one. The new one inherits the logger id value
-	WithName(name string) Logger
+	WithName(name string) interface{}
 }
 
 // Event is DTO, bearing a log message between the log4g components. This

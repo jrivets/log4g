@@ -81,7 +81,7 @@ func (l *log_wrapper) GetName() string {
 	return l.logger.loggerName
 }
 
-func (l *log_wrapper) WithId(id interface{}) Logger {
+func (l *log_wrapper) WithId(id interface{}) interface{} {
 	if id != l.loggerId {
 		lg := l.clone()
 		lg.loggerId = id
@@ -90,7 +90,7 @@ func (l *log_wrapper) WithId(id interface{}) Logger {
 	return l
 }
 
-func (l *log_wrapper) WithName(name string) Logger {
+func (l *log_wrapper) WithName(name string) interface{} {
 	if l.logger.loggerName != name {
 		lg := GetLogger(name)
 		return lg.WithId(l.loggerId)

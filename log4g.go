@@ -71,6 +71,9 @@ type Logger interface {
 	// Returns logger by specified name. This is a fabric function for loggers
 	// produced from an existing one. The new one inherits the logger id value
 	WithName(name string) interface{}
+
+	// Returns the logger level
+	GetLevel() Level
 }
 
 // Event is DTO, bearing a log message between the log4g components. This

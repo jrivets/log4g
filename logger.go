@@ -98,6 +98,10 @@ func (l *log_wrapper) WithName(name string) interface{} {
 	return l
 }
 
+func (l *log_wrapper) GetLevel() Level {
+	return l.logger.logLevel
+}
+
 func (l *log_wrapper) logInternal(level Level, payload interface{}) {
 	l.logger.lctx.log(&Event{level, time.Now(), l.logger.loggerName, l.loggerId, payload})
 }

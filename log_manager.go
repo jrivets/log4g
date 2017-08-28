@@ -90,8 +90,10 @@ func (lm *logManager) shutdown() {
 }
 
 func (lm *logManager) setPropsFromFile(configFileName string) error {
+	fmt.Println("Loading log4g configuration from  ", configFileName)
 	f, err := os.Open(configFileName)
 	if err != nil {
+		fmt.Println("Could not open file ", configFileName, " err=", err)
 		return err
 	}
 	defer f.Close()

@@ -3,7 +3,6 @@ package log4g
 import (
 	"errors"
 	"fmt"
-	"github.com/jrivets/gorivets"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -11,6 +10,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/jrivets/gorivets"
 )
 
 // log4g the appender registration name
@@ -355,6 +356,7 @@ func (fa *fileAppender) close() {
 		fmt.Fprintf(os.Stderr, "File appender %+v: %s\n", fa, err)
 	}
 	if fa.file != nil {
+		fa.file.Sync()
 		fa.file.Close()
 		fa.file = nil
 	}

@@ -1,9 +1,10 @@
 package log4g
 
 import (
-	"github.com/jrivets/gorivets"
 	"regexp"
 	"strings"
+
+	"github.com/jrivets/gorivets"
 )
 
 const maxInt64 = 1<<63 - 1
@@ -124,7 +125,7 @@ func isCorrectLoggerName(loggerName string) bool {
 	if loggerName == "" {
 		return true
 	}
-	matched, err := regexp.MatchString("^[A-Za-z]+([A-Za-z0-9.]*[A-Za-z0-9]+)*$", loggerName)
+	matched, err := regexp.MatchString("^[A-Za-z]+([A-Za-z0-9.-_]*[A-Za-z0-9]+)*$", loggerName)
 	if !matched || err != nil {
 		return false
 	}

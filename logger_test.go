@@ -60,13 +60,13 @@ func (s *loggerSuite) TestLogDisabled(c *C) {
 func (s *loggerSuite) TestLogf(c *C) {
 	lctx := &logContext{eventsCh: make(chan *Event, 2)}
 	l := wrap(&logger{"a", nil, lctx, INFO})
-	l.Logf(INFO, "Hello %s")
+	l.Logf(INFO, "Hello")
 	l.Logf(INFO, "Hello %s", "World!")
 	c.Assert(l.GetName(), Equals, "a")
 	go waitThenClose(500, lctx)
 	le, ok := <-lctx.eventsCh
 	c.Assert(ok, Equals, true)
-	c.Assert(le.Payload.(string), Equals, "Hello %s")
+	c.Assert(le.Payload.(string), Equals, "Hello")
 
 	le, ok = <-lctx.eventsCh
 	c.Assert(ok, Equals, true)

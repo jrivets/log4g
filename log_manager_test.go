@@ -12,7 +12,7 @@ type logManagerSuite struct {
 
 var _ = check.Suite(&logManagerSuite{})
 
-func (s *logManagerSuite) TestInit(c *check.C) {
+func (s *logManagerSuite) _TestInit(c *check.C) {
 	lm()
 	lm()
 	err := gorivets.CheckPanic(func() {
